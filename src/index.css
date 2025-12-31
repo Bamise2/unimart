@@ -1,0 +1,113 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* ================================
+   Tailwind v4 Theme (Light)
+   ================================ */
+/* @theme {
+  --color-background: oklch(0.985 0.01 70);
+  --color-foreground: oklch(0.145 0 0);
+
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.145 0 0);
+
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.145 0 0);
+
+  --color-primary: oklch(0.42 0.27 250);
+  --color-primary-foreground: oklch(1 0 0);
+
+  --color-secondary: oklch(0.97 0 0);
+  --color-secondary-foreground: oklch(0.205 0 0);
+
+  --color-muted: oklch(0.95 0.01 70);
+  --color-muted-foreground: oklch(0.556 0 0);
+
+  --color-accent: oklch(0.42 0.27 250);
+  --color-accent-foreground: oklch(1 0 0);
+
+  --color-destructive: oklch(0.577 0.245 27.325);
+  --color-destructive-foreground: oklch(1 0 0);
+
+  --color-border: oklch(0.922 0 0);
+  --color-input: oklch(0.922 0 0);
+  --color-ring: oklch(0.42 0.27 250);
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  
+} */
+
+/* ================================
+   Tailwind v4 Theme (Dark)
+   ================================ */
+/* @theme dark {
+  --color-background: oklch(0.145 0 0);
+  --color-foreground: oklch(0.985 0 0);
+
+  --color-card: oklch(0.145 0 0);
+  --color-card-foreground: oklch(0.985 0 0);
+
+  --color-popover: oklch(0.145 0 0);
+  --color-popover-foreground: oklch(0.985 0 0);
+
+  --color-secondary: oklch(0.269 0 0);
+  --color-secondary-foreground: oklch(0.985 0 0);
+
+  --color-muted: oklch(0.269 0 0);
+  --color-muted-foreground: oklch(0.708 0 0);
+
+  --color-border: oklch(0.269 0 0);
+  --color-input: oklch(0.269 0 0);
+} */
+
+/* ================================
+   Base Styles
+   ================================ */
+/* @layer base {
+  *,
+  ::before,
+  ::after {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+} */
+
+
+
+@theme {
+  /* CampusMart Color Palette */
+  --color-background: #e4f1ff; /* Light Blue Background */
+  --color-foreground: #10102a; /* Deep Navy Text */
+  
+  --color-primary: #103470;    /* Primary Blue */
+  --color-primary-foreground: #ffffff;
+  
+  --color-secondary: #2856c3;  /* Accent Blue */
+  --color-secondary-foreground: #ffffff;
+  
+  --color-card: #ffffff;
+  --color-card-foreground: #10102a;
+  
+  --color-muted: #f0f7ff;
+  --color-muted-foreground: #64748b;
+  
+  --color-border: #cbd5e1;
+  --color-input: #ffffff;
+  
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: sans-serif; /* Add your preferred font here */
+  }
+}
