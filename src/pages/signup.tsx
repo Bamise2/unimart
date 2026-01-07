@@ -2,9 +2,10 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Button } from "../components/ui/button"
 import { Eye, EyeOff, User, Mail, Lock } from "lucide-react"
-import { auth, db } from "../libs/firebase" // CONNECTS TO FIREBASE
+import { auth, db } from "../libs/firebase"
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
 import { doc, setDoc, serverTimestamp } from "firebase/firestore"
+import ResponseModal from "../components/response-modal"
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -13,6 +14,23 @@ export default function SignupPage() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+
+  // Modal State
+  const [resModal, setResModal] = useState({
+    isOpen: false,
+    type: 'success' as 'success' | 'error',
+    title: '',
+    message: ''
+  })
+
+  // Handle Modal Close (Redirect logic)
+  const handleCloseModal = () => {
+    setResModal(prev => ({ ...prev, isOpen: false }))
+    // Only navigate if it was a success (User saw the code)
+    if (resModal.type === 'success') {
+        navigate("/verify-email")
+    }
+  }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,27 +54,50 @@ export default function SignupPage() {
         email: email,
         university: "University of Ibadan",
         role: "student",
-        isVerified: false, 
+        isVerified: false,
         verificationCode: verificationCode, // Storing code for verification
         createdAt: serverTimestamp()
       })
 
-      // 5. SIMULATE EMAIL SENDING (Alert code for testing)
-      alert(`DEMO MODE: Your Verification Code is ${verificationCode}`)
+      // 5. SHOW SUCCESS MODAL WITH CODE (Replaces Alert)
+      setResModal({
+        isOpen: true,
+        type: 'success',
+        title: 'Account Created Successfully!',
+        message: `DEMO MODE: Your Verification Code is ${verificationCode}. Please memorize or copy this code to verify your account.`
+      })
       
-      // 6. REDIRECT TO VERIFY PAGE
-      navigate("/verify-email")
+      // Note: We do NOT navigate here anymore. We navigate in handleCloseModal.
 
     } catch (error: any) {
       console.error("Firebase Error:", error)
-      alert("Error: " + error.message)
+      
+      // Better Error Handling
+      let errorMsg = error.message
+      if (error.code === 'auth/email-already-in-use') errorMsg = "This email is already in use."
+      if (error.code === 'auth/weak-password') errorMsg = "Password should be at least 6 characters."
+
+      setResModal({
+        isOpen: true,
+        type: 'error',
+        title: 'Signup Failed',
+        message: errorMsg
+      })
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-sans">
+      <ResponseModal
+        isOpen={resModal.isOpen}
+        onClose={handleCloseModal}
+        type={resModal.type}
+        title={resModal.title}
+        message={resModal.message}
+      />
+
       {/* LEFT SIDE - FORM */}
       <div className="flex flex-col justify-center bg-white p-8 lg:p-24 order-last lg:order-first">
         <div className="mx-auto w-full max-w-md">

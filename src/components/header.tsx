@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom"
 import { Button } from "./ui/button"
-import { User, LogOut, MessageCircle, Heart, Store, Menu, X, LayoutGrid } from "lucide-react"
+import { User, LogOut, MessageCircle, Heart, Store, Menu, X, LayoutGrid, Search } from "lucide-react"
 import { auth } from "../libs/firebase"
 import { signOut } from "firebase/auth"
 import { useState, useEffect } from "react"
@@ -41,7 +41,6 @@ export default function Header() {
           {/* 2. CENTER NAVIGATION (Guest Mode) */}
           {isLanding && (
             <nav className="hidden md:flex gap-8">
-              
               {["Features", "How it works", "FAQs"].map((item) => (
                 <a key={item} href={`#${item.toLowerCase().replace(/\s/g, '-')}`} className="text-sm font-medium text-gray-500 hover:text-[#103470] transition">
                   {item}
@@ -58,6 +57,11 @@ export default function Header() {
                     <LayoutGrid size={20} />
                     <span className="text-sm font-medium">Market</span>
                 </Link>
+
+                {/* <Link to="/lost-found" className="flex items-center gap-1 text-gray-600 hover:text-[#103470] transition">
+                    <Search size={20} />
+                    <span className="text-sm font-medium">Lost & Found</span>
+                </Link> */}
 
                 <Link to="/chat" className="flex items-center gap-1 text-gray-600 hover:text-[#103470] transition">
                     <MessageCircle size={20} />
@@ -78,8 +82,6 @@ export default function Header() {
                 <Link to="/wishlist" className="text-gray-600 hover:text-red-500 transition">
                     <Heart size={22} />
                 </Link>
-
-                {/* REMOVED CART LINK HERE */}
 
                 <button onClick={handleLogout} className="ml-2 text-gray-400 hover:text-red-500">
                     <LogOut size={20} />
