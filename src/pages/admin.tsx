@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Header from "../components/header"
 import { Button } from "../components/ui/button"
-import { ShieldAlert, Users, Package, Trash2, CheckCircle, Lock, Eye, X, User, ShoppingBag, Tag, AlertTriangle, BarChart3 } from "lucide-react"
+
+import { ShieldAlert, Users, Package, CheckCircle, Lock, Eye, X, ShoppingBag, Tag, AlertTriangle } from "lucide-react"
 import { db } from "../libs/firebase"
 import { collection, getDocs, doc, updateDoc, query, orderBy, writeBatch, deleteDoc } from "firebase/firestore"
 import type { Product, UserData, Report } from "../libs/types"
@@ -19,11 +20,12 @@ interface AdminProduct extends Product {
 
 // --- REALISTIC NIGERIAN USERS (Integrated seamlessly) ---
 const DUMMY_USERS: AdminUser[] = [
-  { uid: 'u_101', displayName: 'Chinedu Okafor', email: 'chinedu.o@stu.ui.edu.ng', role: 'student', verified: true, createdAt: null },
-  { uid: 'u_102', displayName: 'Fatima Yusuf', email: 'fatima.y@stu.ui.edu.ng', role: 'student', verified: true, createdAt: null },
-  { uid: 'u_103', displayName: 'Tolu Adebayo', email: 'tolu.ade@stu.ui.edu.ng', role: 'student', verified: true, createdAt: null },
-  { uid: 'u_104', displayName: 'Emeka Nnamdi', email: 'emeka.n@stu.ui.edu.ng', role: 'student', verified: false, createdAt: null },
-  { uid: 'u_105', displayName: 'Zainab Ibrahim', email: 'zainab.i@stu.ui.edu.ng', role: 'student', verified: true, createdAt: null },
+  // FIXED: Changed 'createdAt: null' to 'createdAt: undefined' to satisfy TypeScript
+  { uid: 'u_101', displayName: 'Chinedu Okafor', email: 'chinedu.o@stu.ui.edu.ng', role: 'student', verified: true, createdAt: undefined },
+  { uid: 'u_102', displayName: 'Fatima Yusuf', email: 'fatima.y@stu.ui.edu.ng', role: 'student', verified: true, createdAt: undefined },
+  { uid: 'u_103', displayName: 'Tolu Adebayo', email: 'tolu.ade@stu.ui.edu.ng', role: 'student', verified: true, createdAt: undefined },
+  { uid: 'u_104', displayName: 'Emeka Nnamdi', email: 'emeka.n@stu.ui.edu.ng', role: 'student', verified: false, createdAt: undefined },
+  { uid: 'u_105', displayName: 'Zainab Ibrahim', email: 'zainab.i@stu.ui.edu.ng', role: 'student', verified: true, createdAt: undefined },
 ]
 
 // --- SIMULATE PURCHASE HISTORY ---
@@ -148,9 +150,16 @@ export default function AdminPage() {
       } catch(e) { console.error(e) }
   }
 
-  // Helper to find names for report modal
-  const getUserName = (uid: string) => users.find(u => u.uid === uid)?.displayName || "Unknown User"
-  const getItemTitle = (pid: string) => products.find(p => p.id === pid)?.title || "Unknown Item"
+  // FIXED: Helper functions now accept string | undefined
+  const getUserName = (uid: string | undefined) => {
+    if (!uid) return "Unknown User";
+    return users.find(u => u.uid === uid)?.displayName || "Unknown User";
+  }
+
+  const getItemTitle = (pid: string | undefined) => {
+    if (!pid) return "Unknown Item";
+    return products.find(p => p.id === pid)?.title || "Unknown Item";
+  }
 
   // --- Login Screen ---
   if (!isAdminAuthenticated) {
@@ -321,6 +330,7 @@ export default function AdminPage() {
                                  }
                               </div>
                               <div>
+                                  {/* FIXED: Passing productId safely */}
                                   <p className="font-bold text-[#10102a]">{getItemTitle(selectedReport.productId)}</p>
                                   <p className="text-xs font-mono text-gray-500">ID: {selectedReport.productId}</p>
                               </div>
@@ -331,7 +341,8 @@ export default function AdminPage() {
                       <div className="grid grid-cols-2 gap-4">
                           <div className="bg-blue-50 p-3 rounded-xl border border-blue-100">
                               <p className="text-xs font-bold text-blue-400 uppercase mb-1">Reporter</p>
-                              <p className="font-bold text-sm">{getUserName(selectedReport.reporterId!)}</p>
+                              {/* FIXED: Passing reporterId safely */}
+                              <p className="font-bold text-sm">{getUserName(selectedReport.reporterId)}</p>
                               <p className="text-xs font-mono text-gray-400 truncate">{selectedReport.reporterId}</p>
                           </div>
                           <div className="bg-red-50 p-3 rounded-xl border border-red-100">
@@ -351,10 +362,10 @@ export default function AdminPage() {
 
                   {/* ACTIONS */}
                   <div className="grid grid-cols-2 gap-3">
-                      <Button onClick={()=>handleDeleteListing(selectedReport.productId)} variant="outline" className="border-red-200 text-red-600 hover:bg-red-50">
+                      <Button onClick={()=>selectedReport.productId && handleDeleteListing(selectedReport.productId)} variant="outline" className="border-red-200 text-red-600 hover:bg-red-50">
                           Remove Listing
                       </Button>
-                      <Button onClick={()=>handleBanUser(selectedReport.reportedSellerId)} className="bg-red-600 text-white hover:bg-red-700">
+                      <Button onClick={()=>selectedReport.reportedSellerId && handleBanUser(selectedReport.reportedSellerId)} className="bg-red-600 text-white hover:bg-red-700">
                           Ban Seller
                       </Button>
                   </div>

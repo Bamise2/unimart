@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom"
 import { Button } from "./ui/button"
-import { User, LogOut, MessageCircle, Heart, Store, Menu, X, LayoutGrid, Search } from "lucide-react"
+import { User, LogOut, MessageCircle, Heart, Store, Menu, X, LayoutGrid } from "lucide-react"
 import { auth } from "../libs/firebase"
 import { signOut } from "firebase/auth"
 import { useState, useEffect } from "react"

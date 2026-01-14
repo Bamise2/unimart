@@ -12,7 +12,7 @@ export interface Product {
   sellerName?: string
   status?: string
   phoneNumber?: string
-  createdAt?: Timestamp 
+  createdAt?: Timestamp
 }
 
 
@@ -32,8 +32,9 @@ export interface UserData {
   phoneNumber?: string
   wishlist?: string[]
   createdAt?: Timestamp
-
-    isAdmin?: boolean // Add this flag
+  role?: string
+  verified?: boolean
+  isAdmin?: boolean // Add this flag
 }
 
 
@@ -64,24 +65,24 @@ export interface Order {
 
 
 export interface Report {
-    id: string
-    reporterId: string
-    reportedSellerId: string
-    productId?: string
-    reason: string
-    description: string
-    status: 'pending' | 'resolved'
-    createdAt: Timestamp
+  id: string
+  reporterId: string
+  reportedSellerId: string
+  productId?: string
+  reason: string
+  description: string
+  status: 'pending' | 'resolved'
+  createdAt: Timestamp
 }
 
 export interface Review {
-    id: string
-    reviewerId: string
-    reviewerName: string
-    sellerId: string
-    rating: number // 1 to 5
-    comment: string
-    createdAt: Timestamp
+  id: string
+  reviewerId: string
+  reviewerName: string
+  sellerId: string
+  rating: number // 1 to 5
+  comment: string
+  createdAt: Timestamp
 }
 
 export interface Service {
@@ -97,4 +98,17 @@ export interface Service {
   rating: number
   reviewsCount: number
   createdAt: Timestamp | any // allow flexibility for dummy data
+}
+
+export interface LostItem {
+  id: string
+  type: 'lost' | 'found'
+  title: string
+  description: string
+  location: string
+  contactPhone: string
+  date: Timestamp
+  userId: string
+  userName: string
+  image: string
 }

@@ -41,7 +41,7 @@ export default function ProductDetailsPage() {
 
         if (productSnap.exists()) {
           const productData = productSnap.data() as Product
-          setProduct({ id: productSnap.id, ...productData })
+          setProduct({ ...productData, id: productSnap.id })
           currentSellerId = productData.sellerId || ""
           if (currentSellerId) {
             const sellerRef = doc(db, "sellers", currentSellerId)

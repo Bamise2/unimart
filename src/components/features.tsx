@@ -1,4 +1,4 @@
-import { CheckCircle2, Lock, MessageCircle, Smartphone, Search, CreditCard } from "lucide-react"
+import { CheckCircle2, Lock, MessageCircle, Smartphone, Search } from "lucide-react"
 
 export default function Features() {
   return (

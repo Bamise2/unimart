@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import Header from "../components/header"
 import { Button } from "../components/ui/button"
-import { Heart, MapPin, Search, Filter, Grid, List, ChevronDown, User, Sparkles, TrendingUp, Zap, ShoppingBag, BookOpen, Laptop, Scissors, Package, Star, Eye, ArrowRight, X } from "lucide-react"
+import { Heart, MapPin, Search, Filter, Grid, List, ChevronDown, Sparkles, TrendingUp, Zap, ShoppingBag, BookOpen, Laptop, Scissors, Package, Star, Eye, ArrowRight, X } from "lucide-react"
 import { db, auth } from "../libs/firebase"
 import { collection, getDocs, doc, updateDoc, arrayUnion, arrayRemove, getDoc, setDoc, orderBy, query } from "firebase/firestore"
 import type { Product } from "../libs/types"
@@ -42,14 +42,14 @@ export default function MarketplacePage() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [wishlist, setWishlist] = useState<string[]>([])
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
+
   const [searchFocused, setSearchFocused] = useState(false)
 
   // Filter State
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [selectedPriceRange, setSelectedPriceRange] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
-  const [showFilters, setShowFilters] = useState(false)
+
 
   // View mode
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
@@ -112,7 +112,7 @@ export default function MarketplacePage() {
   const filteredProducts = products.filter(product => {
       // 1. Search Filter
       const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            product.description.toLowerCase().includes(searchQuery.toLowerCase())
+                            (product.description ?? '').toLowerCase().includes(searchQuery.toLowerCase())
       
       // 2. Category Filter
       const matchesCategory = selectedCategory === "All" || product.category === selectedCategory
@@ -405,8 +405,7 @@ export default function MarketplacePage() {
                                 animation: 'fadeInUp 0.5s ease-out forwards',
                                 opacity: 0
                               }}
-                              onMouseEnter={() => setHoveredCard(product.id)}
-                              onMouseLeave={() => setHoveredCard(null)}
+
                             >
                                 {/* Image Area */}
                                 <div className={`relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50 ${viewMode === "list" ? "w-48 flex-shrink-0" : "aspect-square"}`}>
